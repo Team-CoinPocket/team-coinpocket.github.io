@@ -10,6 +10,10 @@ npm run dev      # http://localhost:4321 에서 미리보기
 npm run build    # 공개용 파일을 dist/ 에 만든다
 ```
 
+## 공개 방법
+
+`main` 브랜치에 올리면 GitHub Actions(`.github/workflows/deploy.yml`)가 빌드해 GitHub Pages에 자동으로 공개합니다. 진행 상황은 저장소의 **Actions** 탭에서 볼 수 있습니다.
+
 ## 고칠 곳
 
 | 무엇 | 파일 |
