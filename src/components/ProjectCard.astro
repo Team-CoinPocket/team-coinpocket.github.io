@@ -17,15 +17,23 @@ const date = new Date(p.released).toLocaleDateString(lang === 'ko' ? 'ko-KR' : '
 });
 ---
 
-<article class="card">
-	<a href={p.link.url} target="_blank" rel="noopener" class="thumb">
-		<Image src={p.image} alt={p.name[lang]} />
+<article class="card" data-reveal>
+	<a href={p.link.url} target="_blank" rel="noopener" class="thumb" tabindex="-1" aria-hidden="true">
+		<Image src={p.image} alt="" />
 	</a>
 	<div class="body">
+		<ul class="chips">
+			<li><span class="dot"></span>{s.released} {date}</li>
+			{p.platforms.map((pf) => <li>{pf}</li>)}
+		</ul>
 		<h3>{p.name[lang]}</h3>
-		<p class="meta">{s.released} {date} · {p.platforms.join(', ')}</p>
 		<p class="summary">{p.summary[lang]}</p>
-		<a class="button" href={p.link.url} target="_blank" rel="noopener">{s.viewOn(p.link.label)} ↗</a>
+		<a class="button" href={p.link.url} target="_blank" rel="noopener">
+			{s.viewOn(p.link.label)}
+			<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+				<path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+		</a>
 	</div>
 </article>
 
@@ -33,31 +41,91 @@ const date = new Date(p.released).toLocaleDateString(lang === 'ko' ? 'ko-KR' : '
 	.card {
 		display: grid;
 		grid-template-columns: minmax(0, 460px) 1fr;
-		gap: 24px;
-		align-items: start;
+		gap: 40px;
+		align-items: center;
+		padding: 20px;
+		border-radius: var(--radius);
+		background: var(--surface);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow);
+		transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s, border-color 0.4s;
 	}
-	@media (max-width: 720px) {
-		.card { grid-template-columns: 1fr; }
+	.card.is-in:hover {
+		transform: translateY(-4px);
+		border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+		box-shadow: var(--shadow), 0 24px 48px -24px var(--glow);
+	}
+	@media (max-width: 860px) {
+		.card { grid-template-columns: 1fr; gap: 24px; padding: 14px; }
+		.body { padding: 0 6px 8px; }
+	}
+
+	.thumb {
+		display: block;
+		overflow: hidden;
+		border-radius: calc(var(--radius) - 8px);
+		background: var(--surface-2);
 	}
 	.thumb img {
 		display: block;
 		width: 100%;
 		height: auto;
-		border-radius: 10px;
+		transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+	.card:hover .thumb img { transform: scale(1.04); }
+
+	.body { padding-right: 20px; }
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0 0 16px;
+		padding: 0;
+		list-style: none;
+	}
+	.chips li {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 4px 12px;
+		border-radius: 999px;
+		background: var(--surface-2);
 		border: 1px solid var(--line);
-	}
-	h3 { margin: 0; font-size: 1.4rem; }
-	.meta { margin: 4px 0 12px; font-size: 0.9rem; color: var(--muted); }
-	.summary { margin: 0 0 20px; }
-	.button {
-		display: inline-block;
-		padding: 8px 16px;
-		border-radius: 8px;
-		background: var(--accent);
-		color: #fff;
+		font-size: 0.8rem;
 		font-weight: 600;
-		font-size: 0.9rem;
-		text-decoration: none;
+		color: var(--muted);
 	}
-	.button:hover { filter: brightness(1.08); }
+	.dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #2fb36b;
+		box-shadow: 0 0 0 3px rgb(47 179 107 / 0.2);
+	}
+	h3 {
+		margin: 0;
+		font-size: clamp(1.6rem, 3vw, 2.1rem);
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		line-height: 1.2;
+	}
+	.summary { margin: 12px 0 28px; color: var(--muted); font-size: 1.02rem; }
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 20px;
+		border-radius: 999px;
+		background: var(--accent);
+		color: var(--on-accent);
+		font-weight: 700;
+		font-size: 0.95rem;
+		text-decoration: none;
+		box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.12), 0 6px 16px -6px var(--glow);
+		transition: transform 0.2s, filter 0.2s;
+	}
+	.button:hover { filter: brightness(1.06); transform: translateY(-1px); }
+	.button svg { transition: transform 0.2s; }
+	.button:hover svg { transform: translate(2px, -2px); }
 </style>

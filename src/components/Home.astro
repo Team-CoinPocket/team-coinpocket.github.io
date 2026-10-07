@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import HeroCoins from './HeroCoins.astro';
 import ProjectCard from './ProjectCard.astro';
 import { t, type Lang } from '../i18n';
 import { projects } from '../projects';
@@ -11,39 +12,170 @@ interface Props {
 const { lang } = Astro.props;
 const s = t[lang];
 const sections = Object.entries(s.sections);
+// 첫 화면 제목 위 작은 글씨: 다른 언어의 팀 이름
+const otherName = lang === 'ko' ? t.en.teamName : t.ko.teamName;
+const firstSection = sections[0];
 ---
 
 <Base lang={lang}>
 	<section class="hero">
-		<h1>{s.teamName}</h1>
-		{s.tagline && <p>{s.tagline}</p>}
+		<div class="backdrop" aria-hidden="true"></div>
+		<div class="wrap hero-grid">
+			<div class="hero-text">
+				<p class="eyebrow" lang={lang === 'ko' ? 'en' : 'ko'} data-reveal>{otherName}</p>
+				<h1 data-reveal style="--delay:.08s">{s.teamName}</h1>
+				{s.tagline && <p class="tagline" data-reveal style="--delay:.16s">{s.tagline}</p>}
+			</div>
+			<div class="hero-art" data-reveal style="--delay:.2s">
+				<HeroCoins />
+			</div>
+		</div>
+		{firstSection && (
+			<a class="scroll-cue" href={`#${firstSection[0]}`} aria-label={firstSection[1].title}>
+				<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+					<path d="M10 4v12m0 0-5-5m5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</a>
+		)}
 	</section>
 
-	{sections.map(([id, sec]) => (
+	{sections.map(([id, sec], i) => (
 		<section id={id} class="block">
-			<h2>{sec.title}</h2>
-			{sec.body && <p>{sec.body}</p>}
-			{id === 'projects' && (
-				<div class="projects">
-					{projects.map((p) => <ProjectCard project={p} lang={lang} />)}
-				</div>
-			)}
+			<div class="wrap">
+				<header class="block-head" data-reveal>
+					<span class="index">{String(i + 1).padStart(2, '0')}</span>
+					<h2>{sec.title}</h2>
+					{sec.body && <p>{sec.body}</p>}
+				</header>
+				{id === 'projects' && (
+					<div class="projects">
+						{projects.map((p) => <ProjectCard project={p} lang={lang} />)}
+					</div>
+				)}
+			</div>
 		</section>
 	))}
 </Base>
 
 <style>
-	.hero { padding: 96px 0 64px; }
-	.hero h1 {
-		margin: 0;
-		font-size: clamp(2.4rem, 7vw, 4rem);
-		line-height: 1.1;
-		letter-spacing: -0.02em;
+	.hero {
+		position: relative;
+		min-height: min(78svh, 760px);
+		display: grid;
+		align-items: center;
+		padding-block: 48px 96px;
+		overflow: hidden;
+		isolation: isolate;
 	}
-	.hero p { margin: 16px 0 0; font-size: 1.2rem; color: var(--muted); }
-	.block { padding: 32px 0; border-top: 1px solid var(--line); }
-	.block h2 { margin: 0 0 8px; font-size: 1.1rem; color: var(--accent); }
-	.block > p { margin: 0; color: var(--muted); }
-	.block h2 + .projects { margin-top: 16px; }
-	.projects { display: grid; gap: 40px; }
+	.backdrop {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		mask-image: linear-gradient(to bottom, #000 60%, transparent);
+		-webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+		background:
+			radial-gradient(60% 60% at 78% 40%, var(--glow), transparent 70%),
+			radial-gradient(40% 50% at 10% 90%, rgb(160 110 230 / 0.12), transparent 70%);
+	}
+	/* 은은한 점 무늬, 아래로 갈수록 사라짐 */
+	.backdrop::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: radial-gradient(var(--line) 1px, transparent 1px);
+		background-size: 22px 22px;
+		mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+		-webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+	}
+	.hero-grid {
+		display: grid;
+		grid-template-columns: 1.15fr 1fr;
+		align-items: center;
+		gap: 40px;
+	}
+	@media (max-width: 860px) {
+		.hero { min-height: auto; padding-block: 56px 96px; }
+		.hero-grid { grid-template-columns: 1fr; gap: 24px; }
+		.hero-art { order: -1; }
+	}
+
+	.eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		margin: 0 0 20px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--accent-ink);
+	}
+	.eyebrow:lang(ko) { letter-spacing: 0.06em; }
+	.eyebrow::before {
+		content: '';
+		width: 28px;
+		height: 2px;
+		border-radius: 2px;
+		background: currentColor;
+	}
+	h1 {
+		margin: 0;
+		font-size: clamp(3.4rem, 10vw, 7.5rem);
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: -0.045em;
+	}
+	.tagline {
+		max-width: 26em;
+		margin: 28px 0 0;
+		font-size: clamp(1.1rem, 2vw, 1.35rem);
+		line-height: 1.55;
+		color: var(--muted);
+	}
+
+	.scroll-cue {
+		position: absolute;
+		left: 50%;
+		bottom: 28px;
+		translate: -50% 0;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--surface) 70%, transparent);
+		color: var(--muted);
+		transition: color 0.2s, border-color 0.2s;
+		animation: nudge 2.4s ease-in-out infinite;
+	}
+	.scroll-cue:hover { color: var(--fg); border-color: var(--accent); }
+	@keyframes nudge {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(5px); }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.scroll-cue { animation: none; }
+	}
+
+	.block { padding-top: 96px; }
+	.block-head { margin-bottom: 40px; }
+	.index {
+		display: block;
+		margin-bottom: 8px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: var(--accent-ink);
+		font-variant-numeric: tabular-nums;
+	}
+	.block-head h2 {
+		margin: 0;
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 800;
+		letter-spacing: -0.035em;
+		line-height: 1.15;
+	}
+	.block-head p { max-width: 36em; margin: 12px 0 0; color: var(--muted); font-size: 1.05rem; }
+	.projects { display: grid; gap: 32px; }
 </style>

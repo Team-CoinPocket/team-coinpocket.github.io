@@ -1,0 +1,74 @@
+---
+// 첫 화면 오른쪽에 떠 있는 동전 그림. 장식이라 화면 읽기 프로그램에는 숨긴다.
+// x·y 는 그림 칸 안의 위치(%), size 는 지름(px), tilt 는 기울기(도), delay 는 흔들림 시작(초).
+const coins = [
+	{ x: 52, y: 14, size: 150, tilt: -14, delay: 0 },
+	{ x: 16, y: 40, size: 104, tilt: 18, delay: -1.6 },
+	{ x: 62, y: 58, size: 120, tilt: 8, delay: -3.1 },
+	{ x: 28, y: 6, size: 64, tilt: 26, delay: -2.2 },
+	{ x: 8, y: 76, size: 56, tilt: -22, delay: -0.8 },
+	{ x: 86, y: 40, size: 48, tilt: -30, delay: -4 },
+];
+---
+
+<div class="coins" aria-hidden="true">
+	<div class="glow"></div>
+	{coins.map((c) => (
+		<div
+			class="coin"
+			style={`left:${c.x}%;top:${c.y}%;--size:${c.size}px;--tilt:${c.tilt}deg;animation-delay:${c.delay}s`}
+		>
+			<svg viewBox="0 0 100 100">
+				<ellipse cx="50" cy="58" rx="46" ry="34" class="edge" />
+				<rect x="4" y="46" width="92" height="12" class="edge" />
+				<ellipse cx="50" cy="46" rx="46" ry="34" class="face" />
+				<ellipse cx="50" cy="46" rx="33" ry="24" class="ring" />
+				<rect x="40" y="42.5" width="20" height="7" rx="3.5" class="slot" />
+				<path d="M17 34a36 26 0 0 1 22-13" class="shine" />
+			</svg>
+		</div>
+	))}
+</div>
+
+<style>
+	.coins {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1;
+		max-width: 460px;
+		margin-inline: auto;
+	}
+	.glow {
+		position: absolute;
+		inset: 12%;
+		border-radius: 50%;
+		background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+		filter: blur(20px);
+	}
+	.coin {
+		position: absolute;
+		width: var(--size);
+		translate: -50% 0;
+		rotate: var(--tilt);
+		animation: bob 6s ease-in-out infinite;
+		filter: drop-shadow(0 18px 24px rgb(120 70 0 / 0.22));
+	}
+	.coin svg { display: block; width: 100%; height: auto; }
+	.edge { fill: #c48420; }
+	.face { fill: #f4bb40; }
+	.ring { fill: none; stroke: #dc9d2c; stroke-width: 3; }
+	.slot { fill: #c48420; }
+	.shine { fill: none; stroke: #fff; stroke-opacity: 0.6; stroke-width: 4; stroke-linecap: round; }
+
+	@keyframes bob {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-14px); }
+	}
+	@media (max-width: 860px) {
+		.coins { max-width: 300px; }
+		.coin { width: calc(var(--size) * 0.65); }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.coin { animation: none; }
+	}
+</style>
