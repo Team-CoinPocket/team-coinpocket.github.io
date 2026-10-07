@@ -1,0 +1,93 @@
+---
+import { languages, homePath, t, type Lang } from '../i18n';
+
+interface Props {
+	lang: Lang;
+	title?: string;
+}
+
+const { lang, title } = Astro.props;
+const s = t[lang];
+const pageTitle = title ? `${title} · ${s.teamName}` : s.teamName;
+---
+
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{s.tagline && <meta name="description" content={s.tagline} />}
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		{(Object.keys(languages) as Lang[]).map((l) => (
+			<link rel="alternate" hreflang={l} href={new URL(homePath[l], Astro.site)} />
+		))}
+		<title>{pageTitle}</title>
+	</head>
+	<body>
+		<header>
+			<a class="brand" href={homePath[lang]}>{s.teamName}</a>
+			<nav class="langs">
+				{(Object.keys(languages) as Lang[]).map((l) => (
+					<a href={homePath[l]} aria-current={l === lang ? 'true' : undefined}>{languages[l]}</a>
+				))}
+			</nav>
+		</header>
+		<main>
+			<slot />
+		</main>
+		<footer>{s.footer}</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--bg: #fbfaf7;
+		--fg: #1d1d1f;
+		--muted: #6b6b70;
+		--line: #e4e2dc;
+		--accent: #c08a1e;
+		color-scheme: light;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--bg: #141416;
+			--fg: #ececee;
+			--muted: #9a9aa2;
+			--line: #2c2c31;
+			--accent: #e2b04a;
+			color-scheme: dark;
+		}
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--bg);
+		color: var(--fg);
+		font-family: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+		line-height: 1.6;
+		word-break: keep-all;
+	}
+	header, main, footer {
+		max-width: 960px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 64px;
+	}
+	a { color: inherit; }
+	.brand { font-weight: 700; text-decoration: none; }
+	.langs { display: flex; gap: 12px; font-size: 0.9rem; }
+	.langs a { color: var(--muted); text-decoration: none; }
+	.langs a[aria-current] { color: var(--fg); font-weight: 600; }
+	footer {
+		margin-top: 80px;
+		padding-block: 24px;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 0.85rem;
+	}
+</style>
