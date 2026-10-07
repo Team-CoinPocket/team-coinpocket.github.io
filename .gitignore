@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# 공개하지 않는 Claude 메모
+CLAUDE.local.md
