@@ -10,6 +10,7 @@ export const t = {
 		// 첫 화면 아래 칸들. 위에서부터 순서대로 보인다. (팀 소개 칸은 내용이 정해지면 추가)
 		sections: {
 			projects: { title: '프로젝트', body: '' },
+			contact: { title: '연락처', body: '' },
 		},
 		released: '출시',
 		viewOn: (store: string) => `${store}에서 보기`,
@@ -20,12 +21,16 @@ export const t = {
 		tagline: 'Collecting small ideas, like coins, to make games',
 		sections: {
 			projects: { title: 'Projects', body: '' },
+			contact: { title: 'Contact', body: '' },
 		},
 		released: 'Released',
 		viewOn: (store: string) => `View on ${store}`,
 		footer: 'This site is a work in progress.',
 	},
 } satisfies Record<Lang, unknown>;
+
+// 연락처 칸에 보이는 메일 주소 (Google Workspace 별칭)
+export const contactEmail = 'contact@coinpocket.studio';
 
 // 각 언어 첫 화면 주소
 export const homePath: Record<Lang, string> = { ko: '/', en: '/en/' };
