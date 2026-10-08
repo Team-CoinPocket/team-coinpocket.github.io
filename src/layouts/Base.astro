@@ -14,6 +14,10 @@ const s = t[lang];
 const pageTitle = title ? `${title} · ${s.teamName}` : s.teamName;
 const langs = Object.keys(languages) as Lang[];
 const sections = Object.entries(s.sections);
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+// 공유 미리보기 이미지 (scripts/og-image.html 로 만든 것)
+const ogImage = new URL(`/og-${lang}.png`, Astro.site);
+const ogLocale: Record<Lang, string> = { ko: 'ko_KR', en: 'en_US' };
 ---
 
 <html lang={lang}>
@@ -21,6 +25,20 @@ const sections = Object.entries(s.sections);
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		{s.tagline && <meta name="description" content={s.tagline} />}
+		<link rel="canonical" href={pageUrl} />
+		<!-- 링크를 카톡·디스코드·X 등에 붙였을 때 뜨는 미리보기 -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={s.teamName} />
+		<meta property="og:title" content={pageTitle} />
+		{s.tagline && <meta property="og:description" content={s.tagline} />}
+		<meta property="og:url" content={pageUrl} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={s.teamName} />
+		<meta property="og:locale" content={ogLocale[lang]} />
+		{langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="theme-color" content="#faf8f3" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0e0d12" media="(prefers-color-scheme: dark)" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />

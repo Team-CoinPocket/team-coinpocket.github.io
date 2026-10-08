@@ -1,0 +1,117 @@
+<!doctype html>
+<!--
+	공유 미리보기 이미지(1200×630) 틀. 링크를 카톡·디스코드·X 에 붙였을 때 뜨는 그림이다.
+	글자는 src/i18n.ts 와 같게 맞춘다. 바뀌면 여기도 고치고 아래 명령으로 다시 찍는다 (프로젝트 폴더에서, Git Bash).
+
+	C="/c/Program Files/Google/Chrome/Application/chrome.exe"
+	for l in ko en; do "$C" --headless=new --hide-scrollbars --virtual-time-budget=5000 --window-size=1200,630 \
+		--screenshot="public/og-$l.png" "file:///$PWD/scripts/og-image.html?lang=$l"; done
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+	* { box-sizing: border-box; }
+	html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+	body {
+		position: relative;
+		background: #0e0d12;
+		color: #f3f0e9;
+		font-family: 'Pretendard Variable', Pretendard, sans-serif;
+		word-break: keep-all;
+	}
+	.bg {
+		position: absolute;
+		inset: 0;
+		background:
+			radial-gradient(55% 75% at 80% 45%, rgb(242 181 58 / 0.32), transparent 70%),
+			radial-gradient(40% 60% at 5% 100%, rgb(160 110 230 / 0.16), transparent 70%);
+	}
+	.bg::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: radial-gradient(rgb(255 255 255 / 0.07) 1.2px, transparent 1.2px);
+		background-size: 24px 24px;
+	}
+	.text {
+		position: absolute;
+		left: 80px;
+		top: 50%;
+		translate: 0 -50%;
+		width: 620px;
+	}
+	.eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		margin: 0 0 24px;
+		font-size: 26px;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: #f2b94a;
+	}
+	.eyebrow:lang(ko) { letter-spacing: 0.06em; }
+	.eyebrow::before { content: ''; width: 40px; height: 3px; border-radius: 3px; background: currentColor; }
+	h1 {
+		margin: 0;
+		font-size: 136px;
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: -0.045em;
+	}
+	h1:lang(en) { font-size: 112px; }
+	p.tagline { text-wrap: balance; margin: 32px 0 0; font-size: 32px; line-height: 1.45; color: #b5b1bd; }
+	.coin { position: absolute; filter: drop-shadow(0 20px 26px rgb(0 0 0 / 0.45)); }
+	.edge { fill: #c48420; }
+	.face { fill: #f4bb40; }
+	.ring { fill: none; stroke: #dc9d2c; stroke-width: 3; }
+	.slot { fill: #c48420; }
+	.shine { fill: none; stroke: #fff; stroke-opacity: 0.6; stroke-width: 4; stroke-linecap: round; }
+</style>
+</head>
+<body>
+	<div class="bg"></div>
+	<div class="text">
+		<p class="eyebrow" id="eyebrow"></p>
+		<h1 id="name"></h1>
+		<p class="tagline" id="tagline"></p>
+	</div>
+	<svg width="0" height="0" style="position:absolute">
+		<symbol id="coin" viewBox="0 0 100 100">
+			<ellipse cx="50" cy="58" rx="46" ry="34" class="edge" />
+			<rect x="4" y="46" width="92" height="12" class="edge" />
+			<ellipse cx="50" cy="46" rx="46" ry="34" class="face" />
+			<ellipse cx="50" cy="46" rx="33" ry="24" class="ring" />
+			<rect x="40" y="42.5" width="20" height="7" rx="3.5" class="slot" />
+			<path d="M17 34a36 26 0 0 1 22-13" class="shine" />
+		</symbol>
+	</svg>
+	<div id="coins"></div>
+	<script>
+		const text = {
+			ko: { eyebrow: 'CoinPocket', eyebrowLang: 'en', name: '동전지갑', tagline: '동전처럼 작은 아이디어를 모아 게임을 만듭니다' },
+			en: { eyebrow: '동전지갑', eyebrowLang: 'ko', name: 'CoinPocket', tagline: 'Collecting small ideas, like coins, to make games' },
+		};
+		const lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ko';
+		const s = text[lang];
+		document.documentElement.lang = lang;
+		const eb = document.getElementById('eyebrow');
+		eb.textContent = s.eyebrow;
+		eb.lang = s.eyebrowLang;
+		document.getElementById('name').textContent = s.name;
+		document.getElementById('tagline').textContent = s.tagline;
+
+		// 오른쪽 동전들: x·y(px), 지름, 기울기
+		const coins = [
+			[960, 120, 200, -14], [850, 330, 130, 18], [1020, 390, 150, 8],
+			[840, 80, 80, 26], [800, 505, 70, -22], [1145, 280, 60, -30],
+		];
+		document.getElementById('coins').innerHTML = coins.map(([x, y, w, r]) =>
+			`<svg class="coin" style="left:${x - w / 2}px;top:${y}px;width:${w}px;height:${w}px;rotate:${r}deg"><use href="#coin"/></svg>`
+		).join('');
+	</script>
+</body>
+</html>

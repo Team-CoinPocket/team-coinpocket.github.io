@@ -30,7 +30,8 @@ https://team-coinpocket.github.io (나중에 https://coinpocket.studio) 에 공�
 | 공통 틀(머리말·꼬리말·색·글꼴) | `src/layouts/Base.astro` (색은 맨 아래 `:root` 의 `--` 값들) |
 | 첫 화면 모양 | `src/components/Home.astro` |
 | 로고 동전 / 첫 화면 동전 그림 | `src/components/CoinMark.astro` / `HeroCoins.astro` (탭 아이콘은 `public/favicon.svg`) |
-| 도메인 | `astro.config.mjs` 의 `site`, `public/CNAME` |
+| 공유 미리보기 이미지 (1200×630) | `public/og-ko.png`, `og-en.png`. 틀은 `scripts/og-image.html` (다시 찍는 명령이 맨 위에 있다). 팀 이름·한 줄 소개를 바꾸면 같이 고친다 |
+| 도메인 | `astro.config.mjs` 의 `site` (지금은 `https://team-coinpocket.github.io`), `public/CNAME` |
 
 ## 도메인 coinpocket.studio (아직 연결 전)
 
@@ -43,7 +44,7 @@ Google Workspace 가입 때 산 도메인이라 **Squarespace Domains** 에서 �
 | `MX` | `smtp.google.com` | **절대 건드리지 않는다** (메일이 끊긴다) |
 | `TXT` (`v=spf1 include:_spf.google.com ~all`) | 메일 스팸 방지 | **절대 건드리지 않는다** |
 
-연결 순서: 조직 설정에서 도메인 인증(TXT `_github-pages-challenge-…` 추가) → Squarespace 에서 A·www 교체 → 저장소 Pages 설정에 `coinpocket.studio` 등록 → HTTPS 강제. 사용자가 화면을 따라 할 수 있게 한 단계씩 안내한다. 작업 전후로 `Resolve-DnsName coinpocket.studio -Type MX` 로 메일 레코드가 그대로인지 확인한다.
+연결 순서: 조직 설정에서 도메인 인증(TXT `_github-pages-challenge-…` 추가) → Squarespace 에서 A·www 교체 → 저장소 Pages 설정에 `coinpocket.studio` 등록 → HTTPS 강제 → `astro.config.mjs` 의 `site` 를 `https://coinpocket.studio` 로 바꿔 배포. 사용자가 화면을 따라 할 수 있게 한 단계씩 안내한다. 작업 전후로 `Resolve-DnsName coinpocket.studio -Type MX` 로 메일 레코드가 그대로인지 확인한다.
 
 ## 남은 일
 
