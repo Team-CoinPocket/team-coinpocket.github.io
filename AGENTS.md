@@ -25,6 +25,7 @@ https://team-coinpocket.github.io (나중에 https://coinpocket.studio) 에 공�
 |---|---|
 | 팀 이름, 한 줄 소개, 화면 문구, 첫 화면 칸 | `src/i18n.ts` |
 | 프로젝트 카드 | `src/projects.ts` (이미지는 `src/assets/projects/`) |
+| SNS 주소 (X·Instagram·YouTube, 비우면 숨김) | `src/socials.ts` |
 | 카드 모양 | `src/components/ProjectCard.astro` |
 | 공통 틀(머리말·꼬리말·색·글꼴) | `src/layouts/Base.astro` (색은 맨 아래 `:root` 의 `--` 값들) |
 | 첫 화면 모양 | `src/components/Home.astro` |

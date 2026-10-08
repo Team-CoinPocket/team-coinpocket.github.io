@@ -1,5 +1,7 @@
 ---
 import CoinMark from '../components/CoinMark.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { activeSocials } from '../socials';
 import { languages, homePath, t, type Lang } from '../i18n';
 
 interface Props {
@@ -69,6 +71,7 @@ const sections = Object.entries(s.sections);
 						<span>{s.teamName}</span>
 					</a>
 					<p>{s.footer}</p>
+					{activeSocials.length > 0 && <div class="foot-socials"><SocialLinks /></div>}
 				</div>
 				<nav class="foot-langs" aria-label="Language">
 					{langs.map((l) => (
@@ -259,6 +262,7 @@ const sections = Object.entries(s.sections);
 		padding-block: 48px 32px;
 	}
 	.foot-brand p { margin: 12px 0 0; color: var(--muted); font-size: 0.92rem; }
+	.foot-socials { margin-top: 20px; }
 	.foot-langs { display: flex; gap: 16px; font-size: 0.9rem; }
 	.foot-langs a { color: var(--muted); text-decoration: none; }
 	.foot-langs a:hover, .foot-langs a[aria-current] { color: var(--fg); }

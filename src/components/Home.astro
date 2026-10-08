@@ -2,8 +2,10 @@
 import Base from '../layouts/Base.astro';
 import HeroCoins from './HeroCoins.astro';
 import ProjectCard from './ProjectCard.astro';
+import SocialLinks from './SocialLinks.astro';
 import { t, type Lang } from '../i18n';
 import { projects } from '../projects';
+import { activeSocials } from '../socials';
 
 interface Props {
 	lang: Lang;
@@ -25,6 +27,9 @@ const firstSection = sections[0];
 				<p class="eyebrow" lang={lang === 'ko' ? 'en' : 'ko'} data-reveal>{otherName}</p>
 				<h1 data-reveal style="--delay:.08s">{s.teamName}</h1>
 				{s.tagline && <p class="tagline" data-reveal style="--delay:.16s">{s.tagline}</p>}
+				{activeSocials.length > 0 && (
+					<div class="hero-socials" data-reveal style="--delay:.24s"><SocialLinks /></div>
+				)}
 			</div>
 			<div class="hero-art" data-reveal style="--delay:.2s">
 				<HeroCoins />
@@ -132,6 +137,8 @@ const firstSection = sections[0];
 		line-height: 1.55;
 		color: var(--muted);
 	}
+
+	.hero-socials { margin-top: 32px; }
 
 	.scroll-cue {
 		position: absolute;
