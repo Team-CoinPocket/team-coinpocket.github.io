@@ -10,6 +10,7 @@ export const t = {
 		// 첫 화면 아래 칸들. 위에서부터 순서대로 보인다. (팀 소개 칸은 내용이 정해지면 추가)
 		sections: {
 			projects: { title: '프로젝트', body: '' },
+			team: { title: '팀', body: '' },
 			contact: { title: '연락처', body: '' },
 		},
 		released: '출시',
@@ -21,6 +22,7 @@ export const t = {
 		tagline: 'Collecting small ideas, like coins, to make games',
 		sections: {
 			projects: { title: 'Projects', body: '' },
+			team: { title: 'Team', body: '' },
 			contact: { title: 'Contact', body: '' },
 		},
 		released: 'Released',

@@ -3,9 +3,11 @@ import Base from '../layouts/Base.astro';
 import HeroCoins from './HeroCoins.astro';
 import ProjectCard from './ProjectCard.astro';
 import SocialLinks from './SocialLinks.astro';
+import MemberCard from './MemberCard.astro';
 import { t, contactEmail, type Lang } from '../i18n';
 import { projects } from '../projects';
 import { activeSocials } from '../socials';
+import { team } from '../team';
 
 interface Props {
 	lang: Lang;
@@ -55,6 +57,11 @@ const firstSection = sections[0];
 				{id === 'projects' && (
 					<div class="projects">
 						{projects.map((p) => <ProjectCard project={p} lang={lang} />)}
+					</div>
+				)}
+				{id === 'team' && (
+					<div class="team">
+						{team.map((m) => <MemberCard member={m} lang={lang} />)}
 					</div>
 				)}
 				{id === 'contact' && (
@@ -201,6 +208,14 @@ const firstSection = sections[0];
 	}
 	.block-head p { max-width: 36em; margin: 12px 0 0; color: var(--muted); font-size: 1.05rem; }
 	.projects { display: grid; gap: 32px; }
+	.team {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 20px;
+	}
+	@media (max-width: 560px) {
+		.team { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+	}
 
 	.mail {
 		display: inline-flex;
