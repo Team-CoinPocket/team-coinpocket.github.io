@@ -10,50 +10,113 @@ interface Props {
 
 const { member: m, lang } = Astro.props;
 const name = m.name[lang];
+const [mainRole, ...otherRoles] = m.roles[lang];
 ---
 
 <article class="member" data-reveal>
-	<div class="avatar" aria-hidden="true">
-		{m.image ? <Image src={m.image} alt="" width={160} height={160} /> : <span>{[...name][0]}</span>}
+	<div class="stage" aria-hidden="true">
+		{m.image ? (
+			<div class="photo"><Image src={m.image} alt="" width={192} height={192} /></div>
+		) : (
+			<div class="coin"><span>{[...name][0]}</span></div>
+		)}
 	</div>
-	<h3>{name}</h3>
-	<ul class="roles">
-		{m.roles[lang].map((r) => <li>{r}</li>)}
-	</ul>
+	<div class="info">
+		<h3>{name}</h3>
+		<p class="roles">
+			{mainRole && <span class="main">{mainRole}</span>}
+			{otherRoles.map((r) => <span>{r}</span>)}
+		</p>
+	</div>
 </article>
 
 <style>
 	.member {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		padding: 24px;
+		position: relative;
+		overflow: hidden;
 		border-radius: var(--radius);
 		background: var(--surface);
 		border: 1px solid var(--line);
 		box-shadow: var(--shadow);
-		transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s;
+		text-align: center;
+		transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s, box-shadow 0.4s;
 	}
 	.member.is-in:hover {
 		transform: translateY(-4px);
 		border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+		box-shadow: var(--shadow), 0 24px 48px -24px var(--glow);
 	}
-	/* 사진이 없을 때: 이름 첫 글자를 새긴 동전 */
-	.avatar {
+
+	/* 위쪽 무대: 금빛 번짐 + 점 무늬 */
+	.stage {
+		position: relative;
 		display: grid;
 		place-items: center;
-		width: 72px;
-		height: 72px;
-		margin-bottom: 20px;
+		padding: 36px 0 28px;
+		background:
+			radial-gradient(60% 80% at 50% 45%, var(--glow), transparent 75%),
+			radial-gradient(var(--line) 1px, transparent 1px) 0 0 / 14px 14px;
+		border-bottom: 1px solid var(--line);
+		perspective: 600px;
+	}
+
+	/* 동전: 톱니 테두리 + 빛 받는 앞면 + 새긴 글자 */
+	.coin {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 96px;
+		height: 96px;
+		border-radius: 50%;
+		background: repeating-conic-gradient(#c98b22 0deg 3deg, #e6a937 3deg 6deg);
+		box-shadow: 0 14px 24px -10px rgb(120 70 0 / 0.55), 0 0 0 1px rgb(150 95 10 / 0.4);
+		transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+		transform-style: preserve-3d;
+	}
+	.coin::before {
+		content: '';
+		position: absolute;
+		inset: 6px;
+		border-radius: 50%;
+		background: radial-gradient(circle at 34% 28%, #ffe08a 0%, #f6c04a 38%, #e3a330 75%, #c98b22 100%);
+		box-shadow:
+			inset 0 0 0 5px rgb(255 220 130 / 0.35),
+			inset 0 0 0 6px rgb(170 110 20 / 0.45),
+			inset 0 -3px 6px rgb(140 85 10 / 0.35);
+	}
+	/* 반짝임 */
+	.coin::after {
+		content: '';
+		position: absolute;
+		inset: 6px;
+		border-radius: 50%;
+		background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.55) 45%, transparent 60%);
+		background-size: 250% 100%;
+		background-position: 100% 0;
+		transition: background-position 0.9s;
+	}
+	.coin span {
+		position: relative;
+		z-index: 1;
+		font-size: 2.1rem;
+		font-weight: 800;
+		line-height: 1;
+		color: #9a650f;
+		text-shadow: 0 1px 0 rgb(255 236 180 / 0.9), 0 -1px 0 rgb(110 65 0 / 0.35);
+	}
+	.member:hover .coin { transform: rotateY(360deg); }
+	.member:hover .coin::after { background-position: -50% 0; }
+
+	.photo {
+		width: 96px;
+		height: 96px;
 		border-radius: 50%;
 		overflow: hidden;
-		background: #f2b53a;
-		box-shadow: inset 0 0 0 5px #f2b53a, inset 0 0 0 7px #d99a2b, inset 0 -4px 0 7px #c98b22, 0 8px 20px -8px var(--glow);
-		color: #6e4609;
-		font-size: 1.7rem;
-		font-weight: 800;
+		box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px #e6a937, 0 14px 24px -10px rgb(0 0 0 / 0.4);
 	}
-	.avatar :global(img) { width: 100%; height: 100%; object-fit: cover; }
+	.photo :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+	.info { padding: 20px 20px 24px; }
 	h3 {
 		margin: 0;
 		font-size: 1.3rem;
@@ -61,31 +124,30 @@ const name = m.name[lang];
 		letter-spacing: -0.02em;
 	}
 	.roles {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-		margin: 12px 0 0;
-		padding: 0;
-		list-style: none;
-	}
-	.roles li {
-		padding: 3px 10px;
-		border-radius: 999px;
-		background: var(--surface-2);
-		border: 1px solid var(--line);
-		font-size: 0.8rem;
-		font-weight: 600;
+		margin: 6px 0 0;
+		font-size: 0.88rem;
 		color: var(--muted);
-		white-space: nowrap;
 	}
-	.roles li:first-child {
-		background: color-mix(in srgb, var(--accent) 18%, var(--surface));
-		border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-		color: var(--accent-ink);
+	.roles span { display: inline-block; white-space: nowrap; }
+	.roles span + span::before {
+		content: '·';
+		margin: 0 6px;
+		opacity: 0.6;
 	}
+	.roles .main { font-weight: 700; color: var(--accent-ink); }
+
 	@media (max-width: 560px) {
-		.member { padding: 18px 16px; }
-		.avatar { width: 60px; height: 60px; margin-bottom: 16px; font-size: 1.4rem; }
-		h3 { font-size: 1.15rem; }
+		.stage { padding: 28px 0 20px; }
+		.coin, .photo { width: 76px; height: 76px; }
+		.coin span { font-size: 1.7rem; }
+		.info { padding: 14px 12px 18px; }
+		h3 { font-size: 1.1rem; }
+		.roles { font-size: 0.8rem; }
+		.roles span { display: block; }
+		.roles span + span::before { content: none; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.coin, .coin::after { transition: none; }
+		.member:hover .coin { transform: none; }
 	}
 </style>
