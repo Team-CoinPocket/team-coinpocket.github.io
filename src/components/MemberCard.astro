@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { t, type Lang } from '../i18n';
+import type { Lang } from '../i18n';
 import type { Member } from '../team';
 
 interface Props {
@@ -10,7 +10,6 @@ interface Props {
 
 const { member: m, lang } = Astro.props;
 const name = m.name[lang];
-const now = m.now?.[lang] ?? [];
 ---
 
 <article class="member" data-reveal>
@@ -27,14 +26,6 @@ const now = m.now?.[lang] ?? [];
 		<p class="roles">
 			{m.roles[lang].map((r) => <span>{r}</span>)}
 		</p>
-		{now.length > 0 && (
-			<div class="now">
-				<p class="now-label">{t[lang].nowLabel}</p>
-				<ul class="chips">
-					{now.map((r) => <li>{r}</li>)}
-				</ul>
-			</div>
-		)}
 	</div>
 </article>
 
@@ -159,55 +150,12 @@ const now = m.now?.[lang] ?? [];
 		opacity: 0.6;
 	}
 
-	/* 현재 프로젝트 업무: 카드 아래쪽에 붙는다 */
-	.now {
-		width: 100%;
-		margin-top: auto;
-		padding-top: 16px;
-	}
-	.now-label {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		margin: 0 0 10px;
-		font-size: 0.7rem;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--muted);
-	}
-	.now-label::before, .now-label::after {
-		content: '';
-		flex: 1;
-		border-top: 1px dashed var(--line);
-	}
-	.chips {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 6px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-	.chips li {
-		padding: 3px 10px;
-		border-radius: 999px;
-		background: var(--surface-2);
-		border: 1px solid var(--line);
-		font-size: 0.78rem;
-		font-weight: 600;
-		white-space: nowrap;
-	}
-
 	@media (max-width: 560px) {
 		.stage { padding: 28px 0 20px; }
 		.coin, .photo { width: 76px; height: 76px; }
 		.coin span { font-size: 1.5rem; }
 		.coin::before { inset: 7px; }
 		.info { padding: 14px 10px 16px; }
-		.now { padding-top: 12px; }
-		.chips li { padding: 2px 8px; font-size: 0.72rem; }
 		h3 { font-size: 1.1rem; }
 		.roles { font-size: 0.8rem; }
 		.roles span { display: block; }
