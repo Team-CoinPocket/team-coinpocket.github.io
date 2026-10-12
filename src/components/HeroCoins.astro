@@ -12,20 +12,60 @@ const coins = [
 ---
 
 <div class="coins" aria-hidden="true">
+	<!-- 동전 그림 한 개를 정의해 두고 아래에서 여러 번 가져다 쓴다 -->
+	<svg width="0" height="0" class="defs">
+		<defs>
+			<!-- 옆면: 가운데가 밝은 원통 + 가는 톱니 줄 -->
+			<linearGradient id="hc-edge" x1="0" x2="1" y1="0" y2="0">
+				<stop offset="0" stop-color="#6b450f" />
+				<stop offset=".22" stop-color="#b9852c" />
+				<stop offset=".48" stop-color="#ecc673" />
+				<stop offset=".72" stop-color="#a8731f" />
+				<stop offset="1" stop-color="#5e3c0c" />
+			</linearGradient>
+			<pattern id="hc-reed" width="2.2" height="10" patternUnits="userSpaceOnUse">
+				<rect width="0.9" height="10" fill="rgb(60 36 0 / .28)" />
+			</pattern>
+			<!-- 앞면 테두리(볼록)와 안쪽 바닥(오목): 빛 방향을 서로 반대로 -->
+			<linearGradient id="hc-rim" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0" stop-color="#fbe8ad" />
+				<stop offset=".35" stop-color="#d9a748" />
+				<stop offset=".6" stop-color="#f1d084" />
+				<stop offset="1" stop-color="#a26e1d" />
+			</linearGradient>
+			<linearGradient id="hc-field" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0" stop-color="#b98328" />
+				<stop offset=".45" stop-color="#e0b257" />
+				<stop offset=".7" stop-color="#cf9c42" />
+				<stop offset="1" stop-color="#f1d28a" />
+			</linearGradient>
+			<radialGradient id="hc-spec" cx=".32" cy=".3" r=".55">
+				<stop offset="0" stop-color="#fff" stop-opacity=".4" />
+				<stop offset="1" stop-color="#fff" stop-opacity="0" />
+			</radialGradient>
+			<symbol id="hc-coin" viewBox="0 0 100 100">
+				<ellipse cx="50" cy="56" rx="46" ry="34" fill="url(#hc-edge)" />
+				<rect x="4" y="46" width="92" height="10" fill="url(#hc-edge)" />
+				<ellipse cx="50" cy="56" rx="46" ry="34" fill="url(#hc-reed)" />
+				<rect x="4" y="46" width="92" height="10" fill="url(#hc-reed)" />
+				<ellipse cx="50" cy="46" rx="46" ry="34" fill="url(#hc-rim)" />
+				<ellipse cx="50" cy="46.6" rx="39.5" ry="29" fill="rgb(90 55 5 / .35)" />
+				<ellipse cx="50" cy="46" rx="39" ry="28.6" fill="url(#hc-field)" />
+				<!-- 테두리 안쪽 점 무늬와 가는 동심원 -->
+				<ellipse cx="50" cy="46" rx="35" ry="25.6" fill="none" stroke="rgb(100 62 8 / .5)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="0 3" />
+				<ellipse cx="50" cy="46" rx="26" ry="19" fill="none" stroke="rgb(255 240 200 / .25)" stroke-width=".5" />
+				<ellipse cx="50" cy="46" rx="20" ry="14.6" fill="none" stroke="rgb(255 240 200 / .2)" stroke-width=".5" />
+				<ellipse cx="50" cy="46" rx="46" ry="34" fill="url(#hc-spec)" />
+			</symbol>
+		</defs>
+	</svg>
 	<div class="glow"></div>
 	{coins.map((c) => (
 		<div
 			class="coin"
 			style={`left:${c.x}%;top:${c.y}%;--size:${c.size}px;--tilt:${c.tilt}deg;animation-delay:${c.delay}s`}
 		>
-			<svg viewBox="0 0 100 100">
-				<ellipse cx="50" cy="58" rx="46" ry="34" class="edge" />
-				<rect x="4" y="46" width="92" height="12" class="edge" />
-				<ellipse cx="50" cy="46" rx="46" ry="34" class="face" />
-				<ellipse cx="50" cy="46" rx="33" ry="24" class="ring" />
-				<rect x="40" y="42.5" width="20" height="7" rx="3.5" class="slot" />
-				<path d="M17 34a36 26 0 0 1 22-13" class="shine" />
-			</svg>
+			<svg viewBox="0 0 100 100"><use href="#hc-coin" /></svg>
 		</div>
 	))}
 </div>
@@ -51,14 +91,10 @@ const coins = [
 		translate: -50% 0;
 		rotate: var(--tilt);
 		animation: bob 6s ease-in-out infinite;
-		filter: drop-shadow(0 18px 24px rgb(120 70 0 / 0.22));
+		filter: drop-shadow(0 18px 22px rgb(90 55 0 / 0.25));
 	}
 	.coin svg { display: block; width: 100%; height: auto; }
-	.edge { fill: #c48420; }
-	.face { fill: #f4bb40; }
-	.ring { fill: none; stroke: #dc9d2c; stroke-width: 3; }
-	.slot { fill: #c48420; }
-	.shine { fill: none; stroke: #fff; stroke-opacity: 0.6; stroke-width: 4; stroke-linecap: round; }
+	.defs { position: absolute; }
 
 	@keyframes bob {
 		0%, 100% { transform: translateY(0); }
