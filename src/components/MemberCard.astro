@@ -146,8 +146,9 @@ const [mainRole, ...otherRoles] = m.roles[lang];
 		.roles span { display: block; }
 		.roles span + span::before { content: none; }
 	}
+	/* 움직임 줄이기를 켠 사람: 뒤집지 않고 빛만 한 번 지나가며 살짝 밝아진다 */
 	@media (prefers-reduced-motion: reduce) {
-		.coin, .coin::after { transition: none; }
-		.member:hover .coin { transform: none; }
+		.coin { transition: filter 0.4s; }
+		.member:hover .coin { transform: none; filter: brightness(1.1); }
 	}
 </style>
