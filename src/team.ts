@@ -23,19 +23,19 @@ export const team: Member[] = [
 		roles: { ko: ['유니티 클라이언트 개발자'], en: ['Unity Client Developer'] },
 	},
 	{
-		name: { ko: '깔륨:B', en: 'Kalium:B' },
+		name: { ko: '깔륨:B', en: 'Kkalium:B' },
 		roles: { ko: ['배경 디자인'], en: ['Background Art'] },
 	},
 	{
-		name: { ko: '자구미', en: 'Jagumi' },
+		name: { ko: '자구미', en: 'Jagummy' },
 		roles: { ko: ['3D 이펙트'], en: ['3D VFX'] },
 	},
 	{
-		name: { ko: '서우', en: 'Seowoo' },
+		name: { ko: '서우', en: 'Seou' },
 		roles: { ko: ['3D 모델링'], en: ['3D Modeling'] },
 	},
 	{
-		name: { ko: '리릴리', en: 'Ririlly' },
+		name: { ko: '리릴리', en: 'Lililli' },
 		roles: { ko: ['일러스트'], en: ['Illustration'] },
 	},
 	{
@@ -47,7 +47,7 @@ export const team: Member[] = [
 		roles: { ko: ['스토리'], en: ['Story'] },
 	},
 	{
-		name: { ko: '주원', en: 'Juwon' },
+		name: { ko: '주원', en: 'ZooOne' },
 		roles: { ko: ['기획'], en: ['Game Design'] },
 	},
 ];
