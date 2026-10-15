@@ -1,6 +1,6 @@
 # 동전지갑(CoinPocket) 팀 사이트
 
-https://team-coinpocket.github.io (나중에 https://coinpocket.studio) 에 공개되는 팀 사이트. Astro 정적 사이트, 한국어 `/` + 영어 `/en/`.
+https://coinpocket.studio 에 공개되는 팀 사이트 (예전 주소 https://team-coinpocket.github.io 는 이리로 넘어온다). Astro 정적 사이트, 한국어 `/` + 영어 `/en/`.
 
 ## 작업 방식
 
@@ -32,29 +32,29 @@ https://team-coinpocket.github.io (나중에 https://coinpocket.studio) 에 공�
 | 첫 화면 모양 | `src/components/Home.astro` |
 | 로고 동전 / 첫 화면 동전 그림 | `src/components/CoinMark.astro` / `HeroCoins.astro` (탭 아이콘은 `public/favicon.svg`) |
 | 공유 미리보기 이미지 (1200×630) | `public/og-ko.png`, `og-en.png`. 틀은 `scripts/og-image.html` (다시 찍는 명령이 맨 위에 있다). 팀 이름·한 줄 소개를 바꾸면 같이 고친다 |
-| 도메인 | `astro.config.mjs` 의 `site` (지금은 `https://team-coinpocket.github.io`), `public/CNAME` |
+| 도메인 | `astro.config.mjs` 의 `site`, `public/CNAME`. 실제 연결은 저장소 Pages 설정 (`gh api repos/Team-CoinPocket/team-coinpocket.github.io/pages`) |
 | 게임 개인정보처리방침 `/<게임>/privacy/` | `src/privacy/<게임>/en.md` · `ko.md`. **손으로 고치지 않는다.** 원본은 게임 저장소 (Malachite: `D:/Projects/Games/Malachite/docs/privacy-policy.md`). 원본이 바뀌면 `node scripts/sync-privacy.mjs <게임> <원본 경로>` 로 다시 가져온다. 본문을 바꿔야 할 일이 보이면 게임 쪽에 알린다. 빈칸(`[보호책임자]` 등)이 남아 있으면 메뉴에 링크를 걸지 않는다 |
 | `app-ads.txt` (광고 판매자 인증) | `public/app-ads.txt`. AdMob 계정이 하나라 한 줄이 모든 게임을 덮는다. 도메인 루트에서 `text/plain` 으로 열려야 한다 |
 
-## 도메인 coinpocket.studio (아직 연결 전)
+## 도메인 coinpocket.studio (2026-10-16 연결)
 
 Google Workspace 가입 때 산 도메인이라 **Squarespace Domains** 에서 관리한다. 같은 도메인을 팀 메일(Gmail)이 쓴다.
 
-| 레코드 | 지금 | 연결할 때 |
+| 레코드 | 연결 전 | 지금 |
 |---|---|---|
-| `A` 4개 (`@`) | Squarespace "곧 출시 예정" 화면 (`198.49.23.144`·`.145`, `198.185.159.144`·`.145`) | 지우고 GitHub Pages 의 `185.199.108.153` · `109` · `110` · `111.153` 4개로 교체 |
-| `AAAA` 4개 (`@`) | 없음 | `2606:50c0:8000::153` · `8001` · `8002` · `8003::153` 4개 추가 |
-| `CNAME` (`www`) | `ext-sq.squarespace.com` | `team-coinpocket.github.io` 로 교체 |
+| `A` 4개 (`@`) | Squarespace "곧 출시 예정" 화면 ("Squarespace 기본값" 묶음, `HTTPS` 레코드 포함) | 묶음을 지우고 GitHub Pages 의 `185.199.108.153` · `109` · `110` · `111.153` 4개 (사용자 지정 레코드) |
+| `AAAA` 4개 (`@`) | 없음 | `2606:50c0:8000::153` · `8001` · `8002` · `8003::153` |
+| `CNAME` (`www`) | `ext-sq.squarespace.com` | `team-coinpocket.github.io` |
 | `MX` | `smtp.google.com` | **절대 건드리지 않는다** (메일이 끊긴다) |
 | `TXT` (`v=spf1 include:_spf.google.com ~all`) | 메일 스팸 방지 | **절대 건드리지 않는다** |
 | `TXT` (`google._domainkey`) | 메일 서명(DKIM) | **절대 건드리지 않는다** |
-| `TXT` (`_github-pages-challenge-…`) | 없음 | 조직 Pages 설정의 도메인 인증 화면이 알려 주는 값 추가. 인증 뒤에도 지우지 않는다 |
+| `TXT` (`_github-pages-challenge-team-coinpocket`) | 없음 | 조직 Pages 도메인 인증 (verified). **지우지 않는다** |
+| 그 밖의 하위 도메인 레코드, `CNAME` (`_domainconnect`) | 다른 용도 | 건드리지 않는다 (자세한 것은 `CLAUDE.local.md`) |
 
-연결 순서: 조직 설정에서 도메인 인증(TXT `_github-pages-challenge-…` 추가) → Squarespace 에서 A·www 교체, AAAA 추가 → 저장소 Pages 설정에 `coinpocket.studio` 등록 (`gh api -X PUT repos/Team-CoinPocket/team-coinpocket.github.io/pages -f cname=coinpocket.studio`) → 인증서가 나오면 HTTPS 강제 → `astro.config.mjs` 의 `site` 를 `https://coinpocket.studio` 로 바꿔 배포. Pages 에 도메인을 먼저 등록하면 github.io 주소가 아직 Squarespace 를 가리키는 도메인으로 넘어가 사이트가 끊기므로, 도메인 인증을 먼저 끝내 가로채기를 막은 뒤 DNS → Pages 등록 순서로 한다. 사용자가 화면을 따라 할 수 있게 한 단계씩 안내한다. 작업 전후로 `Resolve-DnsName coinpocket.studio -Type MX` 로 메일 레코드가 그대로인지 확인한다.
+DNS 는 Squarespace Domains → coinpocket.studio → DNS 에서 고친다. 레코드를 바꿀 일이 생기면 사용자가 화면을 따라 할 수 있게 한 단계씩 안내하고, 작업 전후로 `Resolve-DnsName coinpocket.studio -Type MX` 로 메일 레코드가 그대로인지 확인한다. 다른 서버로 옮길 때는 `dist` 를 올리고 A·AAAA·www 만 바꾼 뒤 Pages 설정에서 도메인을 뺀다 (`/<게임>/privacy/`, `/app-ads.txt` 경로는 그대로 유지).
 
 ## 남은 일
 
-- 도메인 연결 (Malachite D75 로 진행 중: 사용자의 도메인 인증 TXT · DNS 입력 대기)
 - Malachite 개인정보처리방침의 빈칸(보호책임자 · 시행일)은 Malachite 쪽 원본에서 채운 뒤 다시 가져온다
 - 팀원 사진 (지금은 이름 첫 글자 동전). 팀 칸 설명 문장도 미정이라 숨김
 - 팀 카드에는 팀에서 맡은 일만 둔다. 프로젝트마다 바뀌는 역할(팀장·아트 디렉터 등)은 그 게임을 발표한 뒤 게임 소개나 프레스킷에 크레딧으로 넣는다
