@@ -1,0 +1,109 @@
+---
+// 게임별 개인정보처리방침: /<게임>/privacy/
+// src/privacy/<게임>/en.md · ko.md 가 있으면 페이지가 생긴다. 다음 게임은 같은 폴더를 하나 더 만들면 된다.
+// 본문은 손으로 고치지 않는다. 게임 저장소의 원본을 고친 뒤 scripts/sync-privacy.mjs 로 다시 가져온다.
+import type { MarkdownInstance } from 'astro';
+import Base from '../../layouts/Base.astro';
+
+type Doc = MarkdownInstance<{ source?: string }>;
+
+export function getStaticPaths() {
+	const docs = import.meta.glob<Doc>('../../privacy/*/*.md', { eager: true });
+	const games: Record<string, { en?: Doc; ko?: Doc }> = {};
+	for (const [path, doc] of Object.entries(docs)) {
+		const m = path.match(/privacy\/([^/]+)\/(en|ko)\.md$/);
+		if (m) (games[m[1]] ??= {})[m[2] as 'en' | 'ko'] = doc;
+	}
+	return Object.entries(games).map(([game, d]) => ({ params: { game }, props: d }));
+}
+
+const { en, ko } = Astro.props;
+const title = (en ?? ko)?.getHeadings().find((h) => h.depth === 1)?.text ?? 'Privacy Policy';
+---
+
+<Base lang="en" title={title} localized={false}>
+	<article class="wrap policy">
+		{en && ko && (
+			<nav class="jump" aria-label="Language">
+				<a href="#en" hreflang="en">English</a>
+				<a href="#ko" hreflang="ko" lang="ko">한국어</a>
+			</nav>
+		)}
+		{en && <section id="en" lang="en"><en.Content /></section>}
+		{en && ko && <hr class="split" />}
+		{ko && <section id="ko" lang="ko"><ko.Content /></section>}
+	</article>
+</Base>
+
+<style>
+	.policy {
+		max-width: 760px;
+		padding-top: 40px;
+		overflow-wrap: anywhere;
+	}
+	.jump {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 32px;
+	}
+	.jump a {
+		padding: 6px 14px;
+		border-radius: 999px;
+		background: var(--surface-2);
+		border: 1px solid var(--line);
+		font-size: 0.88rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.jump a:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+	section { scroll-margin-top: calc(var(--header-h) + 16px); }
+	.split {
+		margin: 64px 0;
+		border: 0;
+		border-top: 1px solid var(--line);
+	}
+
+	/* 본문(마크다운에서 만든 글) */
+	.policy :global(h1) {
+		margin: 0 0 8px;
+		font-size: clamp(1.7rem, 5vw, 2.3rem);
+		font-weight: 800;
+		line-height: 1.25;
+		letter-spacing: -0.03em;
+	}
+	.policy :global(h1 + p) { margin-top: 0; color: var(--muted); font-size: 0.92rem; }
+	.policy :global(h2) {
+		margin: 40px 0 12px;
+		font-size: 1.2rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+	.policy :global(p), .policy :global(li) { color: color-mix(in srgb, var(--fg) 88%, var(--muted)); }
+	.policy :global(ul) { padding-left: 1.2em; }
+	.policy :global(a) { color: var(--accent-ink); text-underline-offset: 3px; }
+
+	/* 표: 화면이 좁아도 페이지가 옆으로 밀리지 않게 칸 안에서 줄을 바꾼다 */
+	.policy :global(table) {
+		width: 100%;
+		margin: 16px 0;
+		border-collapse: collapse;
+		font-size: 0.88rem;
+		line-height: 1.55;
+	}
+	.policy :global(th), .policy :global(td) {
+		padding: 10px 12px;
+		border: 1px solid var(--line);
+		text-align: left;
+		vertical-align: top;
+		/* 낱말 중간에서 끊지 않는다 (칸 너비를 낱말 단위로 잡게) */
+		overflow-wrap: break-word;
+	}
+	.policy :global(th) { background: var(--surface-2); font-weight: 700; }
+	.policy :global(td:first-child) { font-weight: 600; }
+
+	@media (max-width: 560px) {
+		.policy { padding-top: 24px; }
+		.policy :global(table) { font-size: 0.8rem; }
+		.policy :global(th), .policy :global(td) { padding: 8px; }
+	}
+</style>

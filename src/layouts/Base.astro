@@ -7,9 +7,11 @@ import { languages, homePath, t, type Lang } from '../i18n';
 interface Props {
 	lang: Lang;
 	title?: string;
+	// false: 한 언어만 있는 페이지가 아니다 (예: 두 언어를 한 페이지에 둔 개인정보처리방침). 언어 바꾸기 단추를 숨긴다.
+	localized?: boolean;
 }
 
-const { lang, title } = Astro.props;
+const { lang, title, localized = true } = Astro.props;
 const s = t[lang];
 const pageTitle = title ? `${title} · ${s.teamName}` : s.teamName;
 const langs = Object.keys(languages) as Lang[];
@@ -37,12 +39,12 @@ const ogLocale: Record<Lang, string> = { ko: 'ko_KR', en: 'en_US' };
 		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content={s.teamName} />
 		<meta property="og:locale" content={ogLocale[lang]} />
-		{langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+		{localized && langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="theme-color" content="#faf8f3" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0e0d12" media="(prefers-color-scheme: dark)" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		{langs.map((l) => (
+		{localized && langs.map((l) => (
 			<link rel="alternate" hreflang={l} href={new URL(homePath[l], Astro.site)} />
 		))}
 		<!-- 글꼴: Pretendard (한글·영문 모두) -->
@@ -64,15 +66,17 @@ const ogLocale: Record<Lang, string> = { ko: 'ko_KR', en: 'en_US' };
 				</a>
 				<div class="right">
 					<nav class="sections">
-						{sections.map(([id, sec]) => <a href={`#${id}`}>{sec.title}</a>)}
+						{sections.map(([id, sec]) => <a href={`${homePath[lang]}#${id}`}>{sec.title}</a>)}
 					</nav>
-					<nav class="langs" aria-label="Language">
-						{langs.map((l) => (
-							<a href={homePath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
-								{languages[l]}
-							</a>
-						))}
-					</nav>
+					{localized && (
+						<nav class="langs" aria-label="Language">
+							{langs.map((l) => (
+								<a href={homePath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
+									{languages[l]}
+								</a>
+							))}
+						</nav>
+					)}
 				</div>
 			</div>
 		</header>
@@ -91,13 +95,15 @@ const ogLocale: Record<Lang, string> = { ko: 'ko_KR', en: 'en_US' };
 					<p>{s.footer}</p>
 					{activeSocials.length > 0 && <div class="foot-socials"><SocialLinks /></div>}
 				</div>
-				<nav class="foot-langs" aria-label="Language">
-					{langs.map((l) => (
-						<a href={homePath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
-							{languages[l]}
-						</a>
-					))}
-				</nav>
+				{localized && (
+					<nav class="foot-langs" aria-label="Language">
+						{langs.map((l) => (
+							<a href={homePath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
+								{languages[l]}
+							</a>
+						))}
+					</nav>
+				)}
 			</div>
 			<div class="wrap copy">© {new Date().getFullYear()} {t.en.teamName}</div>
 		</footer>
