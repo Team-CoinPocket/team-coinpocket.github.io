@@ -1,10 +1,10 @@
 ---
-source: "3475d15 2026-10-16"
+source: "121cdc8 2026-10-16"
 ---
 
 # Privacy Policy — Malachite
 
-Effective date: [YYYY-MM-DD]
+Effective date: 2026-10-16
 
 Malachite ("the Game") is made by CoinPocket ("we"). This policy explains what information the Game collects, why, and the choices you have.
 
