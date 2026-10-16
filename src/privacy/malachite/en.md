@@ -1,5 +1,5 @@
 ---
-source: "121cdc8 2026-10-16"
+source: "378246c 2026-10-16"
 ---
 
 # Privacy Policy — Malachite
@@ -52,4 +52,4 @@ If we change this policy, we will update this page and the effective date above.
 
 ## Contact
 
-CoinPocket — contact@coinpocket.studio
+CoinPocket — privacy@coinpocket.studio

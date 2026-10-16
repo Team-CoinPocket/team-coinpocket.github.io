@@ -1,5 +1,5 @@
 ---
-source: "121cdc8 2026-10-16"
+source: "378246c 2026-10-16"
 ---
 
 # 개인정보처리방침 — Malachite
@@ -51,7 +51,7 @@ source: "121cdc8 2026-10-16"
 ## 7. 개인정보 보호책임자
 
 - 성명: 임태훈
-- 연락처: contact@coinpocket.studio
+- 연락처: privacy@coinpocket.studio
 
 ## 8. 변경
 
