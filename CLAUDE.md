@@ -33,7 +33,7 @@ https://coinpocket.studio 에 공개되는 팀 사이트 (예전 주소 https://
 | 로고 동전 / 첫 화면 동전 그림 | `src/components/CoinMark.astro` / `HeroCoins.astro` (탭 아이콘은 `public/favicon.svg`) |
 | 공유 미리보기 이미지 (1200×630) | `public/og-ko.png`, `og-en.png`. 틀은 `scripts/og-image.html` (다시 찍는 명령이 맨 위에 있다). 팀 이름·한 줄 소개를 바꾸면 같이 고친다 |
 | 도메인 | `astro.config.mjs` 의 `site`, `public/CNAME`. 실제 연결은 저장소 Pages 설정 (`gh api repos/Team-CoinPocket/team-coinpocket.github.io/pages`) |
-| 게임 개인정보처리방침 `/<게임>/privacy/` | `src/privacy/<게임>/en.md` · `ko.md`. **손으로 고치지 않는다.** 원본은 게임 저장소 (Malachite: `D:/Projects/Games/Malachite/docs/privacy-policy.md`). 원본이 바뀌면 `node scripts/sync-privacy.mjs <게임> <원본 경로>` 로 다시 가져온다. 본문을 바꿔야 할 일이 보이면 게임 쪽에 알린다. 빈칸(`[보호책임자]` 등)이 남아 있으면 메뉴에 링크를 걸지 않는다 |
+| 게임 개인정보처리방침 `/<게임>/privacy/` | `src/privacy/<게임>/en.md` · `ko.md`. **손으로 고치지 않는다.** 원본은 게임 저장소 (Malachite: `D:/Projects/Games/Malachite/docs/privacy-policy.md`). 원본이 바뀌면 `node scripts/sync-privacy.mjs <게임> <원본 경로> [커밋]` 로 다시 가져온다 (커밋을 붙이면 다른 브랜치의 그 판을 가져온다). 본문을 바꿔야 할 일이 보이면 게임 쪽에 알린다. 빈칸(`[보호책임자]` 등)이 남아 있으면 메뉴에 링크를 걸지 않는다 |
 | `app-ads.txt` (광고 판매자 인증) | `public/app-ads.txt`. AdMob 계정이 하나라 한 줄이 모든 게임을 덮는다. 도메인 루트에서 `text/plain` 으로 열려야 한다 |
 
 ## 도메인 coinpocket.studio (2026-10-16 연결)

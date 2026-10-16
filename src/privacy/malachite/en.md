@@ -1,5 +1,5 @@
 ---
-source: "378246c 2026-10-16"
+source: "e5b482c 2026-10-16"
 ---
 
 # Privacy Policy — Malachite
@@ -22,29 +22,34 @@ The Game uses the following Google services, which collect information from your
 
 Your game progress is stored on your device.
 
-## Ads and consent
+## Your choices
 
-If you are in the European Economic Area, the United Kingdom, or Switzerland, the Game asks for your consent before personalized ads are shown, using Google's consent tool.
-You can change your choice later from the Game's settings.
-Elsewhere, you can reset or delete your Advertising ID, or opt out of personalized ads, in your Android device settings (Settings → Google → Ads, or Settings → Privacy → Ads).
+- **Analytics:** you can turn off analytics collection at any time in the Game's settings. The Game works the same with it turned off.
+- **Ads:** if you are in the European Economic Area, the United Kingdom, or Switzerland, the Game asks for your consent before personalized ads are shown, using Google's consent tool. You can change your choice later from the Game's settings. Elsewhere, you can reset or delete your Advertising ID, or opt out of personalized ads, in your Android device settings (Settings → Google → Ads, or Settings → Privacy → Ads).
 
 ## Sharing
 
 We do not sell your information. Information is processed by Google as described above, under Google's privacy policy: https://policies.google.com/privacy
 Google may process this information on servers outside your country, including in the United States.
 
-## Retention
+## Retention and deletion
 
-Analytics data is kept according to the Google Analytics data retention setting for the Game (up to 14 months), and then deleted.
+Analytics data is kept for 14 months under the Google Analytics data retention setting for the Game, and then deleted automatically. If we export analytics data, the same period applies.
+When you ask us to delete your information, we delete the analytics data for your app instance ID.
 Information on your device is deleted when you uninstall the Game.
+
+## Security
+
+Access to the analytics and advertising consoles is limited to our studio accounts, which are protected with two-step verification. The Google services above send information over encrypted connections.
 
 ## Children
 
-The Game is not directed to children under 13, and we do not knowingly collect information from them.
+The Game is not directed to children under 13, and we do not knowingly collect information from them. If you believe a child has used the Game, contact us and we will delete the related information.
 
 ## Your rights
 
-You can ask us to access or delete information related to your device. Email us with the app instance ID shown in the Game's settings, and we will respond within 30 days.
+You can ask us to access, delete, or stop processing information related to your device. Email us with the app instance ID shown in the Game's settings, and we will respond within 10 days.
+If you are in the European Economic Area or the United Kingdom, you can also lodge a complaint with your local data protection authority.
 
 ## Changes
 
